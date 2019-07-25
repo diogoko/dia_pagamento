@@ -53,6 +53,18 @@ defmodule DiasUteis do
     Timex.weekday(dia) in [weekday_sabado, weekday_domingo]
   end
 
+  @doc """
+  Verifica se um dia é um dia útil.
+
+  ## Exemplos
+
+      iex> DiasUteis.dia_util? ~D[2019-07-24]
+      true
+      iex> DiasUteis.dia_util? ~D[2019-07-21]
+      false
+      iex> DiasUteis.dia_util? ~D[2019-07-09]
+      false
+  """
   def dia_util?(dia) do
     not (final_de_semana?(dia) or feriado_bancario?(dia))
   end
