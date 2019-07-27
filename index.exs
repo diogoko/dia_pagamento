@@ -10,13 +10,10 @@ ano = 2019
 IO.puts("Mês    Adiant.    Pagamento")
 IO.puts("---------------------------")
 1..12
+  |> Enum.map(&DiaPagamento.por_ano_mes(ano, &1))
   |> Enum.map(
-    fn m ->
-      with primeiro_dia_mes <- Timex.beginning_of_month(ano, m),
-           quinto_dia_util  <- DiasUteis.contar_dias_uteis(primeiro_dia_mes, 5),
-           dez_dias_antes   <- DiasUteis.contar_dias_uteis(Timex.shift(quinto_dia_util, [days: -1]), 10, -1) do
-        "#{m |> Integer.to_string |> String.pad_leading(2, "0")}     #{dez_dias_antes |> Timex.format!("%d/%m", :strftime)}      #{quinto_dia_util |> Timex.format!("%d/%m", :strftime)}"
-      end
+    fn %{ano: _, mes: m, adiantamento: adiantamento, pagamento: pagamento} ->
+      "#{m |> Integer.to_string |> String.pad_leading(2, "0")}     #{adiantamento |> Timex.format!("%d/%m", :strftime)}      #{pagamento |> Timex.format!("%d/%m", :strftime)}"
     end
   )
   |> Enum.map(&IO.puts/1)
@@ -32,7 +29,7 @@ IO.puts("---------------------------")
 #10   <<23/09>>    07/10
 #11     24/10      07/11
 #12     22/11      06/12
-  
+
 # Python
 #'''
 #Mês    Adiant.    Pagamento
