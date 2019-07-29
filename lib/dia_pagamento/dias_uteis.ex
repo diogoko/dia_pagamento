@@ -1,4 +1,7 @@
 defmodule DiasUteis do
+  @weekday_sabado 6
+  @weekday_domingo 7
+
   defp feriados_bancarios do
     # https://feriadosbancarios.febraban.org.br/feriados_show.asp -- municipais
     # https://feriadosbancarios.febraban.org.br/ -- federais
@@ -34,7 +37,7 @@ defmodule DiasUteis do
       false
   """
   def feriado_bancario?(dia) do
-    Enum.any?(feriados_bancarios(), fn x -> Timex.equal?(x, dia) end)
+    Enum.any?(feriados_bancarios(), &Timex.equal?(&1, dia))
   end
 
   @doc """
@@ -48,9 +51,7 @@ defmodule DiasUteis do
       true
   """
   def final_de_semana?(dia) do
-    weekday_sabado = 6
-    weekday_domingo = 7
-    Timex.weekday(dia) in [weekday_sabado, weekday_domingo]
+    Timex.weekday(dia) in [@weekday_sabado, @weekday_domingo]
   end
 
   @doc """
@@ -70,8 +71,8 @@ defmodule DiasUteis do
   end
 
   def dias_uteis(dia, delta \\ 1) do
-    Stream.iterate(dia, fn x -> Timex.shift(x, [days: delta]) end)
-      |> Stream.filter(fn x -> dia_util?(x) end)
+    Stream.iterate(dia, &Timex.shift(&1, [days: delta]))
+      |> Stream.filter(&dia_util?(&1))
   end
 
   def contar_dias_uteis(dia, qtde, delta \\ 1) do
