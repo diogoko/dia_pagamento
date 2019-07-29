@@ -1,5 +1,5 @@
 defmodule DiaPagamento.CLI do
-  def main(args \\ []) do
+  def main(_args \\ []) do
     IO.puts("Mês    Adiant.    Pagamento")
     IO.puts("---------------------------")
 
